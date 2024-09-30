@@ -1,46 +1,83 @@
-import React from 'react';
-import { Avatar, useChatContext } from 'stream-chat-react';
+import React, { useState, useEffect } from 'react';
+import { useChatContext } from 'stream-chat-react';
 
-const SearchResult = ({ channel, type, setToggleContainer }) => {
+import { ResultsDropdown } from './'
+import { SearchIcon } from '../assets';
+
+const ChannelSearch = ({ setToggleContainer }) => {
     const { client, setActiveChannel } = useChatContext();
+    const [query, setQuery] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [teamChannels, setTeamChannels] = useState([])
+    const [directChannels, setDirectChannels] = useState([])
 
-    const handleSelect = async () => {
-        if (type === 'channel') {
-            setActiveChannel(channel);
-        } else if (type === 'user') {
-            // Logic for creating a new direct message channel with the user
-            const filters = {
-                type: 'messaging',
-                member_count: 2,
-                members: { $eq: [client.user.id, channel.id] },
-            };
-
-            const [existingChannel] = await client.queryChannels(filters);
-            if (existingChannel) {
-                setActiveChannel(existingChannel);
-            } else {
-                const newChannel = client.channel('messaging', { members: [channel.id, client.userID] });
-                setActiveChannel(newChannel);
-            }
+    useEffect(() => {
+        if(!query) {
+            setTeamChannels([]);
+            setDirectChannels([]);
         }
-        setToggleContainer(prev => !prev); // Toggle the container if necessary
-    };
+    }, [query])
+
+    const getChannels = async (text) => {
+        try {
+            const channelResponse = client.queryChannels({
+                type: 'team', 
+                name: { $autocomplete: text }, 
+                members: { $in: [client.userID]}
+            });
+            const userResponse = client.queryUsers({
+                id: { $ne: client.userID },
+                name: { $autocomplete: text }
+            })
+
+            const [channels, { users }] = await Promise.all([channelResponse, userResponse]);
+
+            if(channels.length) setTeamChannels(channels);
+            if(users.length) setDirectChannels(users);
+        } catch (error) {
+            setQuery('')
+        }
+    }
+
+    const onSearch = (event) => {
+        event.preventDefault();
+
+        setLoading(true);
+        setQuery(event.target.value);
+        getChannels(event.target.value)
+    }
+
+    const setChannel = (channel) => {
+        setQuery('');
+        setActiveChannel(channel);
+    }
 
     return (
-        <div onClick={handleSelect} className="channel-search__result-container">
-            {type === 'channel' ? (
-                <>
-                    <div className='result-hashtag'>#</div>
-                    <p className='channel-search__result-text'>{channel.data.name}</p>
-                </>
-            ) : (
-                <div className='channel-search__result-user'>
-                    <Avatar image={channel.image} name={channel.name} size={24} />
-                    <p className='channel-search__result-text'>{channel.name}</p>
+        <div className="channel-search__container">
+            <div className="channel-search__input__wrapper">
+                <div className="channel-serach__input__icon">
+                    <SearchIcon />
                 </div>
+                <input 
+                    className="channel-search__input__text" 
+                    placeholder="Search" 
+                    type="text" 
+                    value={query}  
+                    onChange={onSearch}
+                />
+            </div>
+            { query && (
+                <ResultsDropdown 
+                    teamChannels={teamChannels}
+                    directChannels={directChannels}
+                    loading={loading}
+                    setChannel={setChannel}
+                    setQuery={setQuery}
+                    setToggleContainer={setToggleContainer}
+                />
             )}
         </div>
-    );
-};
+    )
+}
 
-export default SearchResult;
+export default ChannelSearch

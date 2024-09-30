@@ -11,7 +11,6 @@ const initialState = {
     password: '',
     confirmPassword: '',
     phoneNumber: '',
-    avatarFile: null,
 };
 
 const Auth = () => {
@@ -21,10 +20,6 @@ const Auth = () => {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleFileChange = (e) => {
-        setForm({ ...form, avatarFile: e.target.files[0] });
     };
 
     const checkPasswordStrength = (password) => {
@@ -65,17 +60,11 @@ const Auth = () => {
         try {
             if (isSignup) {
                 // Sign Up Logic
-                const formData = new FormData();
-                formData.append('username', form.username);
-                formData.append('password', password);
-                formData.append('fullName', form.fullName);
-                formData.append('phoneNumber', form.phoneNumber);
-                if (form.avatarFile) {
-                    formData.append('avatarFile', form.avatarFile);
-                }
-
-                const { data } = await axios.post(`${URL}/signup`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
+                const { data } = await axios.post(`${URL}/signup`, {
+                    username: form.username,
+                    password,
+                    fullName: form.fullName,
+                    phoneNumber: form.phoneNumber,
                 });
 
                 // Set cookies with the returned user data
@@ -83,7 +72,6 @@ const Auth = () => {
                 cookies.set('userId', data.userId, { path: '/' });
                 cookies.set('username', data.username, { path: '/' });
                 cookies.set('fullName', data.fullName, { path: '/' });
-                // Optionally store other data like avatarURL if necessary
 
                 window.location.reload();
 
@@ -99,7 +87,6 @@ const Auth = () => {
                 cookies.set('userId', data.userId, { path: '/' });
                 cookies.set('username', data.username, { path: '/' });
                 cookies.set('fullName', data.fullName, { path: '/' });
-                // Optionally store other data like avatarURL if necessary
 
                 window.location.reload();
             }
@@ -161,18 +148,6 @@ const Auth = () => {
                                     type="text"
                                     placeholder="Phone Number"
                                     onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                        )}
-                        {isSignup && (
-                            <div className="auth__form-container_fields-content_input">
-                                <label htmlFor="avatarFile">Avatar Image</label>
-                                <input
-                                    name="avatarFile"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
                                     required
                                 />
                             </div>

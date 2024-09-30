@@ -1,0 +1,19 @@
+/* Color-related styles */
+.title {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 16px; /* This line keeps the existing styles */
+  }
+  
+  .title-span {
+    color: rgb(97, 218, 251);
+  }
+  
+  .copyright {
+    color: #fff;
+  }
+
+  .test {
+    justify-content: center;
+  }
+  

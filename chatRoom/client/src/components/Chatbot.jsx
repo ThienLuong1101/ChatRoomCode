@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../assets/chatbot.css'; // Make sure to create this CSS file for styling
+import '../assets/chatbot.css'; // Ensure chatbot.css exists for styling
 
 const Chatbot = () => {
     const [input, setInput] = useState('');
@@ -14,7 +14,7 @@ const Chatbot = () => {
         setMessages((prevMessages) => [...prevMessages, userMessage]);
         
         try {
-            const response = await axios.post('http://localhost:5000/ai-chat', { message: input });
+            const response = await axios.post('https://chatroom1-2.onrender.com/ai-chat', { message: input });
             const aiMessage = response.data.aiMessage;
 
             // Append AI's response to the messages array
@@ -33,11 +33,20 @@ const Chatbot = () => {
                 <h2>Chatterly AI</h2>
             </div>
             <div className="messages">
-                {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.sender}`}>
-                        <div className={`message-text`}>{msg.text}</div>
-                    </div>
-                ))}
+                {/* Display a placeholder when there are no messages */}
+                {messages.length === 0 ? (
+                    <div className="channel-empty__container">
+                    <p className="channel-empty__first">The chatbot is introverted at times and may take a while to respond.</p>
+<p className="channel-empty__second">If the wait is too long, click the chatbot icon again to refresh.</p>
+
+                </div>
+                ) : (
+                    messages.map((msg, index) => (
+                        <div key={index} className={`message ${msg.sender}`}>
+                            <div className={`message-text`}>{msg.text}</div>
+                        </div>
+                    ))
+                )}
             </div>
             <form className="message-input" onSubmit={sendMessage}>
                 <input 

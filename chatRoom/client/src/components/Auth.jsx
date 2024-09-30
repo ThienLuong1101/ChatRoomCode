@@ -55,7 +55,7 @@ const Auth = () => {
             return;
         }
 
-        const URL = 'http://localhost:5000/auth';
+        const URL = 'https://chatroom1-2.onrender.com/auth';
 
         try {
             if (isSignup) {
@@ -72,7 +72,7 @@ const Auth = () => {
                 cookies.set('userId', data.userId, { path: '/' });
                 cookies.set('username', data.username, { path: '/' });
                 cookies.set('fullName', data.fullName, { path: '/' });
-
+                setAlert({ message: "Login successful!", type: 'success' });
                 window.location.reload();
 
             } else {

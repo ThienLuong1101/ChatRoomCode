@@ -275,7 +275,7 @@
     flex: 1;
     /* height: 800px; */
     height: 100%;
-    background-color: rgb(22 25 37);
+    background-color: black;
     color: #f7f7f7;
     /* border-radius: 16px; */
     box-shadow: rgba(0, 0, 0, 0.33) 0px 1px 4px 0px;
@@ -305,7 +305,7 @@
   .str-chat__textarea__textarea {
     min-height: 2.5rem;
     padding-left: 100px;
-    border-radius: 2rem;
+    
     font-size: 1.3rem;
     font-family: 'Neue Helvetica', 'Roboto', 'San Francisco', sans-serif;
   }
@@ -313,6 +313,12 @@
 .message-input-container {
   position: relative;
   width: 100%;
+}
+textarea.rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea {
+  padding-left: 10px !important; /* Use !important to override any other conflicting styles */
+  display: flex;
+  justify-content: center;
+  border-radius: 2rem;
 }
 
 
@@ -357,13 +363,16 @@
   
   .channel-empty__container {
     display: flex;
+    text-align: center;
+    font-size: 4rem;
+
     height: 100%;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     margin-left: 20px;
     margin-right: 20px;
     padding-bottom: 20px;
-    background-color: #1b1b1b; /* Dark background */
+    background-color: black; /* Dark background */
   }
   
   .channel-empty__avatars {
@@ -393,7 +402,7 @@
   .channel-empty__first {
     font-family: Helvetica Neue, sans-serif;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.6rem;
     line-height: 120%;
     color: #f7f7f7; /* Light text for contrast */
     margin-bottom: 10px;
@@ -405,7 +414,7 @@
   
   .channel-empty__second {
     font-family: Helvetica Neue, sans-serif;
-    font-size: 14px;
+    font-size: 1rem;
     line-height: 120%;
     margin: 0;
     color: #b0b3b8; /* Slightly lighter gray for subtext */
@@ -414,7 +423,7 @@
   .channel__container {
     height: 100%;
     width: 100%;
-    background-color: #1b1b1b; /* Dark mode container background */
+    background-color: black; /* Dark mode container background */
   }
   
   
@@ -1968,6 +1977,19 @@
     background-color: #f7f7f7;
     color: black;
     border-radius: 1.4rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .user-item__name-wrapper .str-chat__avatar-fallback {
+    font-size: 1.5rem;
+  
+
+    color: white;
+    background-color: transparent;
+    border-radius: 1.4rem;
+    width: 2rem;
+    height: 2rem;
   }
   .team-channerl-header_menu-icon {
     display: none;
@@ -1996,9 +2018,9 @@
     transition: 0.8s ease;
   }
   
-  .str-chat__input-flat {
-    width: 100%;
-    padding: 10px;
+  
+  .rta__textarea.str-chat__textarea__textarea.str-chat__message-textarea {
+    padding-left: 10px; /* Adjust the value to your preferred padding */
   }
   
   @media screen and (max-width: 960px) {

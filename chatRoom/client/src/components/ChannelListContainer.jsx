@@ -12,9 +12,17 @@ const cookies = new Cookies();
 
 const SideBar = ({ logout, toggleMenu, toggleAIChatbot, aiActive }) => (
     <div className="channel-list__sidebar">
-        <div className="channel-list__sidebar__icon1" onClick={toggleMenu}>
+        <div className="channel-list__sidebar__icon2" onClick={toggleMenu}>
             <div className="icon1__inner">
                 <img src={MenuIcon} alt="Menu" width="30" />
+            </div>
+        </div>
+         <div 
+            className="channel-list__sidebar__icon2"
+            style={{ backgroundColor: aiActive ? '#74AA9C' : '' }} // Conditional background color
+        >
+            <div className="icon2__inner" onClick={toggleAIChatbot}> {/* Toggle AI Chatbot */}
+                <img src={AIIcon} alt="AI" width="30" />
             </div>
         </div>
         <div className="channel-list__sidebar__icon2">
@@ -22,14 +30,7 @@ const SideBar = ({ logout, toggleMenu, toggleAIChatbot, aiActive }) => (
                 <img src={LogoutIcon} alt="Logout" width="30" />
             </div>
         </div>
-        <div 
-            className="channel-list__sidebar__icon2"
-            style={{ backgroundColor: aiActive ? '#648694' : '' }} // Conditional background color
-        >
-            <div className="icon2__inner" onClick={toggleAIChatbot}> {/* Toggle AI Chatbot */}
-                <img src={AIIcon} alt="AI" width="30" />
-            </div>
-        </div>
+       
     </div>
 );
 
@@ -74,7 +75,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
         cookies.remove('avatarURL');
         cookies.remove('hashedPassword');
         cookies.remove('phoneNumber');
-
+        
         window.location.reload();
     };
 
@@ -83,7 +84,8 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
     return (
         <>
             <SideBar logout={logout} toggleMenu={toggleMenu} toggleAIChatbot={handleToggleAIChatbot} aiActive={aiActive} /> {/* Pass the AI active state */}
-            <div style={{ display: menuVisible ? 'flex' : 'none' }}>
+            <div style={{ display: menuVisible || aiActive ? 'flex' : 'none' }}>
+
                 <div className="channel-list__list__wrapper" style={{ display: 'flex' }}>
                     <CompanyHeader />
                     <ChannelSearch setToggleContainer={setToggleContainer} />

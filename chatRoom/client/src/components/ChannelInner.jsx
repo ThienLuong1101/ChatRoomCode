@@ -12,7 +12,6 @@ import {
 
 import { ChannelInfo } from '../assets';
 import '../components/App.css';
-import axios from 'axios'; // Import axios to make API requests
 
 const emojis = [
   '😀', '😂', '😍', '😢', '😡', '🥳', '😎', '🤔', '😱', '😴', // Add more emojis as needed
@@ -23,7 +22,6 @@ export const GiphyContext = React.createContext({});
 const ChannelInner = ({ setIsEditing }) => {
   const [giphyState, setGiphyState] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State to control emoji picker visibility
-  const [messageInputValue, setMessageInputValue] = useState(''); // State to control MessageInput text
   const { sendMessage } = useChannelActionContext();
 
   const overrideSubmitHandler = async (message) => {
@@ -39,28 +37,23 @@ const ChannelInner = ({ setIsEditing }) => {
       updatedMessage = { ...updatedMessage, text: `/giphy ${message.text}` };
     }
 
-    // Send user's message to the backend AI API
-    try {
-      const response = await axios.post('http://localhost:5000/ai-chat', { message: message.text });
-      const aiMessage = response.data.aiMessage;
-
-      // Send AI's response as a new message
-      sendMessage({ text: aiMessage, user: { id: 'ai-bot' } }); // Customize user id for AI
-    } catch (error) {
-      console.error("Error sending message to AI:", error);
-    }
-
+    // Send the message
     if (sendMessage) {
-      sendMessage(updatedMessage);
-      setGiphyState(false);
-      setMessageInputValue(''); // Clear the input field after sending
+      await sendMessage(updatedMessage);
     }
   };
 
-  const handleEmojiSelect = (emoji) => {
-    // Append the selected emoji to the MessageInput value
-    setMessageInputValue(prevValue => prevValue + emoji);
-    setShowEmojiPicker(false); // Close the emoji picker after selection
+  const handleEmojiSelect = async (emoji) => {
+    // Directly send the selected emoji as a message
+    const emojiMessage = {
+      text: emoji,
+    };
+
+    if (sendMessage) {
+      await sendMessage(emojiMessage);
+    }
+
+    setShowEmojiPicker(false); // Close the emoji picker after sending the emoji
   };
 
   return (
@@ -97,12 +90,10 @@ const ChannelInner = ({ setIsEditing }) => {
                 😃
               </button>
 
-              {/* MessageInput with the emoji appended to its value */}
+              {/* MessageInput remains as is */}
               <MessageInput
-                value={messageInputValue} // Bind the value to state
-                onChange={(e) => setMessageInputValue(e.target.value)} // Handle input changes
-                style={{ flexGrow: 1 }} // Make MessageInput take the remaining space
                 overrideSubmitHandler={overrideSubmitHandler}
+                style={{ flexGrow: 1 }} // Make MessageInput take the remaining space
               />
             </div>
           </Window>

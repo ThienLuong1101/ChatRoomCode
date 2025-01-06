@@ -9,7 +9,8 @@ import './components/App.css';
 import 'stream-chat-react/dist/css/v2/index.layout.css';
 
 const cookies = new Cookies();
-const apiKey = '2wa56xce9hm9';
+const apiKey = process.env.REACT_APP_STREAM_API_KEY;
+
 const authToken = cookies.get("token");
 
 const App = () => {

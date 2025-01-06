@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, useChatContext } from 'stream-chat-react';
+import { useChatContext } from 'stream-chat-react';
 
 const channelByUser = async ({ client, setActiveChannel, channel, setChannel }) => {
   const filters = {
@@ -50,7 +50,7 @@ const SearchResult = ({ channel, focusedId, type, setChannel, setToggleContainer
       className={focusedId === channel.id ? 'channel-search__result-container__focused' : 'channel-search__result-container' }
     >
       <div className='channel-search__result-user'>
-        <Avatar image={channel.image || undefined} name={channel.name} size={24} />
+
         <p className='channel-search__result-text'>{channel.name}</p>
       </div>
     </div>

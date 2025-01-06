@@ -55,7 +55,7 @@ const Auth = () => {
             return;
         }
 
-        const URL = 'https://chatroom1-2.onrender.com/auth';
+        const URL = 'https://chatroom1-2.onrender.com/auth'; //IMPORTANT
 
         try {
             if (isSignup) {
